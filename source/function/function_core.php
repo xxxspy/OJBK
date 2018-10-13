@@ -209,9 +209,6 @@ function dhtmlspecialchars($string, $flags = null) {
 	} else {
 		if($flags === null) {
 			$string = str_replace(array('&', '"', '<', '>'), array('&amp;', '&quot;', '&lt;', '&gt;'), $string);
-			if(strpos($string, '&amp;#') !== false) {
-				$string = preg_replace('/&amp;((#(\d{3,5}|x[a-fA-F0-9]{4}));)/', '&\\1', $string);
-			}
 		} else {
 			if(PHP_VERSION < '5.4.0') {
 				$string = htmlspecialchars($string, $flags);
@@ -310,8 +307,8 @@ function checkrobot($useragent = '') {
 	static $kw_browsers = array('msie', 'netscape', 'opera', 'konqueror', 'mozilla');
 
 	$useragent = strtolower(empty($useragent) ? $_SERVER['HTTP_USER_AGENT'] : $useragent);
-	if(strpos($useragent, 'http://') === false && dstrpos($useragent, $kw_browsers)) return false;
 	if(dstrpos($useragent, $kw_spiders)) return true;
+	if(strpos($useragent, 'http://') === false && dstrpos($useragent, $kw_browsers)) return false;
 	return false;
 }
 function checkmobile() {
@@ -1037,10 +1034,6 @@ function output() {
 
 	if(defined('IN_MOBILE')) {
 		mobileoutput();
-	}
-	if(!defined('IN_MOBILE') && !defined('IN_ARCHIVER')) {
-		$tipsService = Cloud::loadClass('Service_DiscuzTips');
-		$tipsService->show();
 	}
 	$havedomain = implode('', $_G['setting']['domain']['app']);
 	if($_G['setting']['rewritestatus'] || !empty($havedomain)) {
@@ -1871,7 +1864,6 @@ function cknewuser($return=0) {
 }
 
 function manyoulog($logtype, $uids, $action, $fid = '') {
-	helper_manyou::manyoulog($logtype, $uids, $action, $fid);
 }
 
 function useractionlog($uid, $action) {
@@ -1883,11 +1875,11 @@ function getuseraction($var) {
 }
 
 function getuserapp($panel = 0) {
-	return helper_manyou::getuserapp($panel);
+	return '';
 }
 
 function getmyappiconpath($appid, $iconstatus=0) {
-	return helper_manyou::getmyappiconpath($appid, $iconstatus);
+	return '';
 }
 
 function getexpiration() {
@@ -1981,15 +1973,6 @@ function updatemoderate($idtype, $ids, $status = 0) {
 }
 
 function userappprompt() {
-	global $_G;
-
-	if($_G['setting']['my_app_status'] && $_G['setting']['my_openappprompt'] && empty($_G['cookie']['userappprompt'])) {
-		$sid = $_G['setting']['my_siteid'];
-		$ts = $_G['timestamp'];
-		$key = md5($sid.$ts.$_G['setting']['my_sitekey']);
-		$uchId = $_G['uid'] ? $_G['uid'] : 0;
-		echo '<script type="text/javascript" src="http://notice.uchome.manyou.com/notice/userNotice?sId='.$sid.'&ts='.$ts.'&key='.$key.'&uchId='.$uchId.'" charset="UTF-8"></script>';
-	}
 }
 
 function dintval($int, $allowarray = false) {
@@ -2012,7 +1995,7 @@ function dintval($int, $allowarray = false) {
 
 
 function makeSearchSignUrl() {
-	return getglobal('setting/my_search_data/status') ? helper_manyou::makeSearchSignUrl() : array();
+	return array();
 }
 
 function get_related_link($extent) {
@@ -2040,7 +2023,7 @@ function check_diy_perm($topic = array(), $flag = '') {
 function strhash($string, $operation = 'DECODE', $key = '') {
 	$key = md5($key != '' ? $key : getglobal('authkey'));
 	if($operation == 'DECODE') {
-		$hashcode = gzuncompress(base64_decode(($string)));
+		$hashcode = gzuncompress(base64_decode($string));
 		$string = substr($hashcode, 0, -16);
 		$hash = substr($hashcode, -16);
 		unset($hashcode);

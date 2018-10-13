@@ -19,7 +19,8 @@ class table_forum_post extends discuz_table
 
 		$this->_table = 'forum_post';
 		$this->_pk    = 'pid';
-
+		$this->_pre_cache_key = 'forum_post_';
+		$this->_cache_ttl = 0;
 		parent::__construct();
 	}
 
@@ -728,7 +729,7 @@ class table_forum_post extends discuz_table
 			for($i = 0; $i < count($keywords); $i++) {
 				if(preg_match("/\{(\d+)\}/", $keywords[$i])) {
 					$keywords[$i] = preg_replace("/\\\{(\d+)\\\}/", ".{0,\\1}", preg_quote($keywords[$i], '/'));
-					$sqlkeywords .= " $or p.subject REGEXP '".$keywords[$i]."' OR p.message REGEXP '".$keywords[$i]."'";
+					$sqlkeywords .= " $or p.subject REGEXP '".$keywords[$i]."' OR p.message REGEXP '".addslashes(stripsearchkey($keywords[$i]))."'";
 				} else {
 					$keywords[$i] = addslashes($keywords[$i]);
 					$sqlkeywords .= " $or p.subject LIKE '%".$keywords[$i]."%' OR p.message LIKE '%".$keywords[$i]."%'";
@@ -775,7 +776,7 @@ class table_forum_post extends discuz_table
 			for($i = 0; $i < count($keywords); $i++) {
 				if(preg_match("/\{(\d+)\}/", $keywords[$i])) {
 					$keywords[$i] = preg_replace("/\\\{(\d+)\\\}/", ".{0,\\1}", preg_quote($keywords[$i], '/'));
-					$sqlkeywords .= " $or p.subject REGEXP '".$keywords[$i]."' OR p.message REGEXP '".$keywords[$i]."'";
+					$sqlkeywords .= " $or p.subject REGEXP '".$keywords[$i]."' OR p.message REGEXP '".addslashes(stripsearchkey($keywords[$i]))."'";
 				} else {
 					$keywords[$i] = addslashes($keywords[$i]);
 					$sqlkeywords .= " $or p.subject LIKE '%".$keywords[$i]."%' OR p.message LIKE '%".$keywords[$i]."%'";
