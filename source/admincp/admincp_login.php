@@ -87,8 +87,7 @@ function html_login_footer($halt = true) {
 <tr>
 	<td colspan="2" class="footer">
 		<div class="copyright">
-			<p>Powered by <a href="http://www.discuz.net/" target="_blank">Discuz!</a> $version </p>
-			<p>&copy; 2001-2017, <a href="http://www.comsenz.com/" target="_blank">Comsenz</a> Inc.</p>
+			<p><a href="http://ojbk.cn">OJBK数据分析</a></p>
 		</div>
 	</td>
 </tr>
