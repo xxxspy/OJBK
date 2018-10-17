@@ -133,7 +133,7 @@
 			</p>
 		</div>
 		<div id="frt">
-			<p>Powered by <strong><a href="http://mlln.cn/" target="_blank">Data Science</a></strong> </p>
+			<p> <strong><a href="http://mlln.cn/" target="_blank">Data Science</a></strong> </p>
 		</div>
 		<!--{eval updatesession();}-->
 
